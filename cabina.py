@@ -10,6 +10,14 @@ class Cabina:
         """Cabina standard: prezzo = prezzo base"""
         return self.prezzo_base
 
+    def __eq__(self, other):
+        if isinstance(other, Cabina):
+            return self.codice == other.codice
+        return False
+
+    def __lt__(self, other):
+        return self.prezzo_finale() < other.prezzo_finale()
+
     def __str__(self):
         stato = "Occupata" if self.affittata else "Disponibile"
         return f"{self.codice}: Standard | {self.nposti} letti - Ponte {self.ponte} - Prezzo {self.prezzo_finale():.2f}€ - {stato}"

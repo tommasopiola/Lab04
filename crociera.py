@@ -73,40 +73,45 @@ class Crociera:
         """Associa una cabina a un passeggero"""
         # TODO
         # cerco la cabina
+
+        # utilizzo implicitamente il metodo __eq__
+        cabina_temp = Cabina(codice_cabina, 0, 0, 0)
         cabina = None
         for c in self.cabine:
-            if c.codice == codice_cabina:
+            if c == cabina_temp:
                 cabina = c
                 break
+
         if cabina is None:
             raise Exception(f"Cabina {codice_cabina} non trovata.")
 
-        # cerco il passeggero
         passeggero = None
         for p in self.passeggeri:
             if p.codice_passeggero == codice_passeggero:
                 passeggero = p
                 break
+
         if passeggero is None:
             raise Exception(f"Passeggero {codice_passeggero} non trovato.")
 
-        # Controllo disponibilità cabina
         if cabina.affittata:
             raise Exception(f"La cabina {cabina.codice} è già occupata.")
-
-        # Controllo se passeggero ha già una cabina
-        if hasattr(passeggero, 'cabina') and passeggero.cabina is not None:
+        if passeggero.cabina_assegnata is not None:
             raise Exception(f"Il passeggero {passeggero.codice_passeggero} ha già una cabina assegnata.")
 
-        # Assegno cabina al passeggero
-        cabina.affittata = True
         passeggero.assegna_cabina(cabina)
+        cabina.affittata = True
 
     def cabine_ordinate_per_prezzo(self):
         """Restituisce la lista ordinata delle cabine in base al prezzo"""
         # TODO
-        sorted_cabine = sorted(self.cabine, key=lambda c: c.prezzo_finale())
+        # opzione con __lt__
+        sorted_cabine = sorted(self.cabine)
         return sorted_cabine
+
+        # opzione classica
+        #sorted_cabine = sorted(self.cabine, key=lambda c: c.prezzo_finale())
+        #return sorted_cabine
 
     def elenca_passeggeri(self):
         """Stampa l'elenco dei passeggeri mostrando, per ognuno, la cabina a cui è associato, quando applicabile """

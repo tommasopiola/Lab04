@@ -54,7 +54,7 @@ def main():
             print("Uscita dal programma.")
             break
 
-        #opzione stampa per controllo
+        '''opzione stampa per controllo passaggi
         elif scelta == '7':
             print(crociera.nome)
             for a in crociera.cabine:
@@ -64,7 +64,7 @@ def main():
 
 
         else:
-            print("Scelta non valida.")
+            print("Scelta non valida.") '''
 
 if __name__ == "__main__":
     main()
