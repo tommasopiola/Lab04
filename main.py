@@ -20,6 +20,7 @@ def main():
         if scelta == "1":
             nuovo_nome = input("Inserisci il nuovo nome della crociera: ")
             # TODO: Aggiorna il nome della crociera
+            # aggiorno con metodo setter
             crociera.nome = nuovo_nome
 
         elif scelta == "2":
@@ -53,18 +54,6 @@ def main():
         elif scelta == "6":
             print("Uscita dal programma.")
             break
-
-        '''opzione stampa per controllo passaggi
-        elif scelta == '7':
-            print(crociera.nome)
-            for a in crociera.cabine:
-                print(a)
-            for b in crociera.passeggeri:
-                print(b)
-
-
-        else:
-            print("Scelta non valida.") '''
 
 if __name__ == "__main__":
     main()

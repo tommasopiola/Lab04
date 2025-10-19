@@ -1,7 +1,5 @@
 import csv
-from cabina import Cabina
-from cabina import CabinaDeluxe
-from cabina import CabinaAnimale
+from cabina import Cabina, CabinaDeluxe, CabinaAnimale
 from passeggero import Passeggero
 
 class Crociera:
@@ -36,8 +34,7 @@ class Crociera:
                         continue
                     codice_cabina = riga[0].strip()
 
-                    #leggo cabine da file
-
+                    # leggo cabine da file
                     if codice_cabina.startswith("CAB"):
                         if len(riga) == 4:
                             codice_cabina, nposti, ponte, prezzo = riga
@@ -49,7 +46,7 @@ class Crociera:
                                 codice_cabina, nposti, ponte, prezzo, max_animali = riga
                                 cabina = CabinaAnimale(codice_cabina, nposti, ponte, prezzo, max_animali)
                             except ValueError:
-                                # altrimenti CabinaStilosa
+                                # altrimenti CabinaDeluxe
                                 codice_cabina, nposti, ponte, prezzo, stile = riga
                                 cabina = CabinaDeluxe(codice_cabina, nposti, ponte, prezzo, stile)
                         else:
@@ -73,7 +70,6 @@ class Crociera:
         """Associa una cabina a un passeggero"""
         # TODO
         # cerco la cabina
-
         # utilizzo implicitamente il metodo __eq__
         cabina_temp = Cabina(codice_cabina, 0, 0, 0)
         cabina = None
@@ -85,6 +81,7 @@ class Crociera:
         if cabina is None:
             raise Exception(f"Cabina {codice_cabina} non trovata.")
 
+        # cerco il passeggero
         passeggero = None
         for p in self.passeggeri:
             if p.codice_passeggero == codice_passeggero:
@@ -93,7 +90,6 @@ class Crociera:
 
         if passeggero is None:
             raise Exception(f"Passeggero {codice_passeggero} non trovato.")
-
         if cabina.affittata:
             raise Exception(f"La cabina {cabina.codice} è già occupata.")
         if passeggero.cabina_assegnata is not None:
