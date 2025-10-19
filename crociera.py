@@ -90,6 +90,18 @@ class Crociera:
         if passeggero is None:
             raise Exception(f"Passeggero {codice_passeggero} non trovato.")
 
+        # Controllo disponibilità cabina
+        if cabina.affittata:
+            raise Exception(f"La cabina {cabina.codice} è già occupata.")
+
+        # Controllo se passeggero ha già una cabina
+        if hasattr(passeggero, 'cabina') and passeggero.cabina is not None:
+            raise Exception(f"Il passeggero {passeggero.codice_passeggero} ha già una cabina assegnata.")
+
+        # Assegno cabina al passeggero
+        cabina.affittata = True
+        passeggero.assegna_cabina(cabina)
+
     def cabine_ordinate_per_prezzo(self):
         """Restituisce la lista ordinata delle cabine in base al prezzo"""
         # TODO
@@ -99,4 +111,8 @@ class Crociera:
     def elenca_passeggeri(self):
         """Stampa l'elenco dei passeggeri mostrando, per ognuno, la cabina a cui è associato, quando applicabile """
         # TODO
-
+        for p in self.passeggeri:
+            if p.cabina_assegnata is not None:
+                print(f"{p.codice_passeggero} - {p.nome} {p.cognome} | Cabina: {p.cabina_assegnata}")
+            else:
+                print(f"{p.codice_passeggero} - {p.nome} {p.cognome} | Nessuna cabina assegnata")
