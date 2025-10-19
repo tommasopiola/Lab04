@@ -31,8 +31,9 @@ def main():
                 print("File non trovato.")
 
         elif scelta == "3":
-            codice_cabina = input("Codice cabina: ")
-            codice_passeggero = input("Codice passeggero: ")
+            # aggiungo metodo upper per agevolare l'utente
+            codice_cabina = input("Codice cabina: ").upper()
+            codice_passeggero = input("Codice passeggero: ").upper()
             try:
                 crociera.assegna_passeggero_a_cabina(codice_cabina, codice_passeggero)
                 print("Cabina assegnata con successo.")

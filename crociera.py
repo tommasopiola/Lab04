@@ -1,6 +1,6 @@
 import csv
 from cabina import Cabina
-from cabina import CabinaStilosa
+from cabina import CabinaDeluxe
 from cabina import CabinaAnimale
 from passeggero import Passeggero
 
@@ -49,20 +49,22 @@ class Crociera:
                                 codice_cabina, nposti, ponte, prezzo, max_animali = riga
                                 cabina = CabinaAnimale(codice_cabina, nposti, ponte, prezzo, max_animali)
                             except ValueError:
-                                # altrimenti CabinaDeluxe
+                                # altrimenti CabinaStilosa
                                 codice_cabina, nposti, ponte, prezzo, stile = riga
-                                cabina = CabinaStilosa(codice_cabina, nposti, ponte, prezzo, stile)
+                                cabina = CabinaDeluxe(codice_cabina, nposti, ponte, prezzo, stile)
                         else:
                             continue
                         self.cabine.append(cabina)
-                        print(f" {len(self.cabine)} cabine caricate dal file.")
 
+                    # leggo passeggeri da file
 
-                    elif codice_cabina.startswith("PAS"):
+                    elif codice_cabina.startswith("P"):
                         codice_passeggero, nome, cognome = riga
                         passeggero = Passeggero(codice_passeggero, nome, cognome)
                         self.passeggeri.append(passeggero)
-                        print(f" {len(self.passeggeri)} passeggeri caricati dal file.")
+
+            print(f" {len(self.cabine)} cabine caricate dal file.")
+            print(f" {len(self.passeggeri)} passeggeri caricati dal file.")
 
         except FileNotFoundError:
             raise FileNotFoundError(f"Errore: il file '{file_path}' non esiste.")
@@ -70,11 +72,29 @@ class Crociera:
     def assegna_passeggero_a_cabina(self, codice_cabina, codice_passeggero):
         """Associa una cabina a un passeggero"""
         # TODO
+        # cerco la cabina
+        cabina = None
+        for c in self.cabine:
+            if c.codice == codice_cabina:
+                cabina = c
+                break
+        if cabina is None:
+            raise Exception(f"Cabina {codice_cabina} non trovata.")
+
+        # cerco il passeggero
+        passeggero = None
+        for p in self.passeggeri:
+            if p.codice_passeggero == codice_passeggero:
+                passeggero = p
+                break
+        if passeggero is None:
+            raise Exception(f"Passeggero {codice_passeggero} non trovato.")
 
     def cabine_ordinate_per_prezzo(self):
         """Restituisce la lista ordinata delle cabine in base al prezzo"""
         # TODO
-
+        sorted_cabine = sorted(self.cabine, key=lambda c: c.prezzo_finale())
+        return sorted_cabine
 
     def elenca_passeggeri(self):
         """Stampa l'elenco dei passeggeri mostrando, per ognuno, la cabina a cui è associato, quando applicabile """

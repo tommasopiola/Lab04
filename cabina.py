@@ -4,7 +4,7 @@ class Cabina:
         self.nposti = int(nposti)
         self.ponte = int(ponte)
         self.prezzo_base = float(prezzo_base)
-        self.affittata = False
+        self.affittata = affittata
 
     def prezzo_finale(self):
         """Cabina standard: prezzo = prezzo base"""
@@ -14,7 +14,7 @@ class Cabina:
         stato = "Occupata" if self.affittata else "Disponibile"
         return f"{self.codice}: Standard | {self.nposti} letti - Ponte {self.ponte} - Prezzo {self.prezzo_finale():.2f}€ - {stato}"
 
-class CabinaStilosa(Cabina):
+class CabinaDeluxe(Cabina):
     def __init__(self, codice_cabina, nposti, ponte, prezzo_base, stile):
         super().__init__(codice_cabina, nposti, ponte, prezzo_base)
         self.stile = stile
