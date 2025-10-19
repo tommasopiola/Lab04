@@ -10,12 +10,20 @@ class Crociera:
         # TODO
         self.nome = nome
         self.cabine = []
-        self.cabineanimali = []
-        self.cabinestilose = []
         self.passeggeri= []
 
     """Aggiungere setter e getter se necessari"""
     # TODO
+    @property
+    def nome(self):
+        return self._nome
+
+    @nome.setter
+    def nome(self, nuovo_nome):
+        if not isinstance(nuovo_nome, str) or nuovo_nome.strip() == "":
+            raise ValueError("Nuovo nome non valido: Il nome della crociera deve essere una stringa non vuota.")
+        self._nome = nuovo_nome.strip()
+
 
     def carica_file_dati(self, file_path):
         """Carica i dati (cabine e passeggeri) dal file"""
@@ -24,33 +32,37 @@ class Crociera:
             with open(file_path, "r", encoding="utf-8") as f:
                 reader = csv.reader(f)
                 for riga in reader:
-                    #leggo cabine speciali
-                    if len(riga) == 5:
-                        #leggo cabine animali
-                        if isinstance(riga[4], int):
-                            codice_cabina, nposti, nponte, prezzo_a_notte, nanimali = riga
-                            cabina = CabinaAnimale(codice_cabina.strip(), nposti.strip(),nponte.strip(), prezzo_a_notte.strip(), nanimali.strip())
-                            self.cabineanimali.append(cabina)
-                        #leggo cabine lusso
+                    if not riga:
+                        continue
+                    codice_cabina = riga[0].strip()
+
+                    #leggo cabine da file
+
+                    if codice_cabina.startswith("CAB"):
+                        if len(riga) == 4:
+                            codice_cabina, nposti, ponte, prezzo = riga
+                            cabina = Cabina(codice_cabina, nposti, ponte, prezzo)
+                        elif len(riga) == 5:
+                            try:
+                                # verifico CabinaAnimale
+                                int(riga[4])
+                                codice_cabina, nposti, ponte, prezzo, max_animali = riga
+                                cabina = CabinaAnimale(codice_cabina, nposti, ponte, prezzo, max_animali)
+                            except ValueError:
+                                # altrimenti CabinaDeluxe
+                                codice_cabina, nposti, ponte, prezzo, stile = riga
+                                cabina = CabinaStilosa(codice_cabina, nposti, ponte, prezzo, stile)
                         else:
-                            codice_cabina, nposti, nponte, prezzo_a_notte, stile = riga
-                            cabina = CabinaStilosa(codice_cabina.strip(), nposti.strip(),nponte.strip(), prezzo_a_notte.strip(), stile.strip())
-                            self.cabinestilose.append(cabina)
-                            pass    # == int allora cabina animali
-                    #leggo cabine normali
-                    elif len(riga) == 4:
-                        codice_cabina, nposti, nponte, prezzo_a_notte = riga
-                        cabina = Cabina(codice_cabina.strip(), nposti.strip(), nponte.strip(), prezzo_a_notte.strip())
+                            continue
                         self.cabine.append(cabina)
-                    #leggo passeggeri
-                    else:
+                        print(f" {len(self.cabine)} cabine caricate dal file.")
+
+
+                    elif codice_cabina.startswith("PAS"):
                         codice_passeggero, nome, cognome = riga
                         passeggero = Passeggero(codice_passeggero, nome, cognome)
                         self.passeggeri.append(passeggero)
-
-            print(f"{len(self.cabine)} cabine caricate correttamente dal file '{file_path}'.")
-            print(f"{len(self.passeggeri)} passeggeri caricati correttamente dal file '{file_path}'.")
-
+                        print(f" {len(self.passeggeri)} passeggeri caricati dal file.")
 
         except FileNotFoundError:
             raise FileNotFoundError(f"Errore: il file '{file_path}' non esiste.")

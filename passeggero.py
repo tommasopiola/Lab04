@@ -3,3 +3,10 @@ class Passeggero:
         self.codice_passeggero = codice_passeggero
         self.nome = nome
         self.cognome = cognome
+        self.cabina_assegnata = None
+
+    def __str__(self):
+        if self.cabina_assegnata:
+            return f"{self.codice} - {self.nome} {self.cognome} → Cabina {self.cabina_assegnata}"
+        else:
+            return f"{self.codice} - {self.nome} {self.cognome} → Nessuna cabina"
